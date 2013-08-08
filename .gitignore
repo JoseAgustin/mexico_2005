@@ -12,3 +12,6 @@
 10_storage/.DS_Store
 12_biogenic/.DS_Store
 10_storage/wrfchemi*
+*.[oa]
+*.mod
+*~

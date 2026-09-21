@@ -152,6 +152,6 @@ subroutine guarda
         end do MUNI
 		write(20,300) grid2(i),cemun2(i),fu2,fr2,fu+fr,int(pu2(i)),pr2(i),puT(j),prT(j),pt2(i)
 	end do
-300 format(i6,",",A5,2(",",F10.7),",",(F10.7,","),2(I6,","),2(I7,","),I7)
+300 format(i6,",",A5,2(",",E0.7),",",(E0.7,","),2(I6,","),2(I7,","),I7)
 end subroutine guarda
 end program celda

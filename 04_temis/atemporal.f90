@@ -442,7 +442,7 @@ subroutine storage
    end do
    close(unit=10)
   end do
-100 format(I7,x,<nh>ES12.3)
+100 format(I7,x,24E0.4)
    k=nf-1
 ! WARNING iscc and pm25 must be the before last one to be read.
    open(unit=10,file=casn(k),action='write')
@@ -465,7 +465,7 @@ subroutine storage
      end do
    end do
 	close(10)
-110 format(I7,x,I10,x,<nh>ES12.3)
+110 format(I7,x,I10,x,24E0.4)
 end subroutine storage
 subroutine count
   integer i,j

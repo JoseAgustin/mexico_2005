@@ -106,7 +106,7 @@ implicit none
     read (10,*) cdum
     read (10,*) cdum
     do i=1,nl
-        !print *,i
+        print *,i
         read(10,*)grip(i),idp(i),fp1(i),fp2(i),fp3(i)
     end do
     close(10)
@@ -201,11 +201,11 @@ subroutine guarda
         write(10,300)nscc(k),(scc(k,i),i=1,nscc(k))
         print *,"   Agricola ",ofile(k)
         do i=1,size(fa)
-            write(10,310) gria(i),ida(i),0,fa(i),(eagr(i,k,l),l=1,nscc(k))
+            write(10,310) gria(i),ida(i),0.,fa(i),(eagr(i,k,l),l=1,nscc(k))
         end do
         print *,"   Bosque"
         do i=1,size(fb)
-            write(10,310) grib(i),idb(i),0,fb(i),(ebos(i,k,l),l=1,nscc(k))
+            write(10,310) grib(i),idb(i),0.,fb(i),(ebos(i,k,l),l=1,nscc(k))
         end do
         print *,"   Poblacion"
         do i=1,size(fp1)
@@ -214,8 +214,14 @@ subroutine guarda
 
        close(10)
     end do
-300 format(I3,", kg_per_year",<nnscc>(",",A10))
+#ifndef PGI
+300 format(I3,", g_per_year",<nnscc>(",",A10))
 310 format(I9,",",I6,",",F,",",F,<nnscc>(",",ES12.5))
+#else
+300 format(I3,", g_per_year",41(",",A10))
+310 format(I9,",",I6,",",F0.4,",",F0.4,41(",",ES0.5))
+#endif
+
 end subroutine guarda
 end program area_espacial
 

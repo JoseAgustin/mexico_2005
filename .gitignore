@@ -40,7 +40,8 @@ libnetcdf*
 05_semisM/M_*.txt
 05_semisM/M_CO.csv
 06_temisM/TM*.txt
-07_puntual/T_ANN*.txt
+07_puntual/T_*.txt
+07_puntual/T_*.csv
 08_spec/RADM-2*
 08_spec/SAP*
 09_pm25spec/*A.txt

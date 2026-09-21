@@ -47,8 +47,9 @@ subroutine imprime
 	end do
 	close(10)
 	end do
-210 format(i6,x,<size(jscc)>(I11,x))
-220 format(i6,x,<size(jscc)>ES12.4,x,I2)
+   print *,"Tamaño ",size(jscc)
+210 format(i6,x,35I11,x)
+220 format(i6,x,35E12.4,x,I2)
 end subroutine imprime
 !
 subroutine computations

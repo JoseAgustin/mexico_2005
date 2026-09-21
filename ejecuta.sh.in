@@ -1,0 +1,144 @@
+#!/bin/bash
+#
+#  Generado por configure a partir de ejecuta.sh.in  -- NO editar a mano
+#
+#  Proposito: ejecutar la cadena de conversion del inventario de emisiones
+#             IE 2005 con los programas construidos por make.
+#
+#  Basado en compila.csh (J. A. Garcia Reynoso)
+#
+set -euo pipefail
+
+EXEEXT="@EXEEXT@"
+BASE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOG="$BASE/ejecuta.log"
+
+: > "$LOG"          # el log se trunca una sola vez, al inicio
+
+# ------------------------------------------------------------------
+# Utilidades de tiempo
+# ------------------------------------------------------------------
+declare -a _TIMING=()   # acumula "etapa|segundos" para el resumen final
+
+# Formatea segundos como  Xm Ys  o  Xs
+fmt_elapsed() {
+    local s=$1
+    if (( s >= 60 )); then
+        printf '%dm %02ds' $(( s / 60 )) $(( s % 60 ))
+    else
+        printf '%ds' "$s"
+    fi
+}
+
+# Registra la duracion de una etapa en el array y en el log
+record_stage() {               # record_stage <etiqueta> <segundos>
+    local label="$1" elapsed="$2"
+    _TIMING+=("${label}|${elapsed}")
+    printf '    Tiempo etapa: %s\n' "$(fmt_elapsed "$elapsed")" >> "$LOG"
+}
+
+# run <directorio> <programa>
+# Ejecuta el programa, registra inicio/fin en el log e informa duracion.
+run() {
+    local dir="$1" prog="$2"
+    local t0=$SECONDS
+    printf '\n=== %s  %s/%s ===\n' "$(date '+%F %T')" "$dir" "$prog" >> "$LOG"
+    ( cd "$BASE/$dir" && "./${prog}${EXEEXT}" >> "$LOG" 2>&1 )
+    local elapsed=$(( SECONDS - t0 ))
+    printf '    [%s/%s]  %s\n' "$dir" "$prog" "$(fmt_elapsed "$elapsed")" >> "$LOG"
+    _TIMING+=("${dir}/${prog}|${elapsed}")
+}
+
+# ------------------------------------------------------------------
+# Inicio
+# ------------------------------------------------------------------
+T_TOTAL=$SECONDS
+printf '=== Emisiones IE 2005: inicio  %s ===\n' "$(date '+%F %T')" | tee -a "$LOG"
+
+# ------------------------------------------------------------------
+# Etapa 1: Distribucion espacial de area
+# ------------------------------------------------------------------
+T_STAGE=$SECONDS
+printf '\n--- Etapa 1: Distribucion espacial de area ---\n' >> "$LOG"
+run 02_aemis ASpatial
+record_stage "Etapa 1  (area espacial)" $(( SECONDS - T_STAGE ))
+
+# ------------------------------------------------------------------
+# Configuracion de fecha para la distribucion temporal
+# ------------------------------------------------------------------
+mes=4
+dia=16
+
+printf '\nSe calcula emisiones para mes=%s dia=%s\n' "$mes" "$dia" >> "$LOG"
+
+cd "$BASE/04_temis"
+[ -e fecha.txt ] && rm fecha.txt
+ln -sf anio2005.csv.org anio2005.csv
+cat << End_Of_File > fecha.txt
+$mes       ! month jan =1 to dec=12
+$dia       ! day in the month (from 1 to 28,30 or 31)
+End_Of_File
+cd "$BASE"
+
+# ------------------------------------------------------------------
+# Etapa 2: Temporal area (secuencial — no hay Mtemporal ni puntual paralelo)
+# ------------------------------------------------------------------
+T_STAGE=$SECONDS
+printf '\n--- Etapa 2: Distribucion temporal de area ---\n' >> "$LOG"
+run 04_temis Atemporal
+record_stage "Etapa 2  (Atemporal)" $(( SECONDS - T_STAGE ))
+
+# ------------------------------------------------------------------
+# Etapa 3: Agregacion de moviles
+# ------------------------------------------------------------------
+T_STAGE=$SECONDS
+printf '\n--- Etapa 3: Agregacion de moviles ---\n' >> "$LOG"
+run 03_movilspatial agrega
+record_stage "Etapa 3  (agrega movil)" $(( SECONDS - T_STAGE ))
+
+# ------------------------------------------------------------------
+# Etapa 4: Distribucion espacial de moviles
+# ------------------------------------------------------------------
+T_STAGE=$SECONDS
+printf '\n--- Etapa 4: Distribucion espacial de moviles ---\n' >> "$LOG"
+run 05_semisM MSpatial
+record_stage "Etapa 4  (movil espacial)" $(( SECONDS - T_STAGE ))
+
+# ------------------------------------------------------------------
+# Etapa 5: Distribucion temporal de fuentes fijas (puntual)
+# ------------------------------------------------------------------
+T_STAGE=$SECONDS
+printf '\n--- Etapa 5: Distribucion temporal puntual ---\n' >> "$LOG"
+run 07_puntual Puntual
+record_stage "Etapa 5  (Puntual)" $(( SECONDS - T_STAGE ))
+
+# ------------------------------------------------------------------
+# Etapa 6: Generacion NetCDF para WRF-Chem (RADM2)
+# ------------------------------------------------------------------
+T_STAGE=$SECONDS
+printf '\n--- Etapa 6: Generacion NetCDF (RADM2) ---\n' >> "$LOG"
+run 10_storage radm2bio4
+record_stage "Etapa 6  (NetCDF RADM2)" $(( SECONDS - T_STAGE ))
+
+# ------------------------------------------------------------------
+# Resumen de tiempos
+# ------------------------------------------------------------------
+T_WALL=$(( SECONDS - T_TOTAL ))
+{
+printf '\n'
+printf '=%.0s' {1..55}; printf '\n'
+printf '  RESUMEN DE TIEMPOS  (%s)\n' "$(date '+%F %T')"
+printf '=%.0s' {1..55}; printf '\n'
+printf '  %-42s %s\n' "Proceso / Etapa" "Tiempo"
+printf -- '  %-42s %s\n' "-----------------------------------------" "-------"
+for entry in "${_TIMING[@]}"; do
+    label="${entry%%|*}"
+    secs="${entry##*|}"
+    printf '  %-42s %s\n' "$label" "$(fmt_elapsed "$secs")"
+done
+printf -- '  %-42s %s\n' "-----------------------------------------" "-------"
+printf '  %-42s %s\n' "TOTAL (tiempo real)" "$(fmt_elapsed "$T_WALL")"
+printf '=%.0s' {1..55}; printf '\n'
+} | tee -a "$LOG"
+
+printf '\nEmisiones IE 2005: proceso terminado. Bitacora en %s\n' "$LOG"

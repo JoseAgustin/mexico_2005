@@ -1,16 +1,44 @@
+ ============================================================
+#  .gitignore para mexico_2005
+#  Solo se versionan: codigo fuente (.f90 .F90), scripts de
+#  configuracion/ejecucion (.sh.in, .am, .ac) y README.
+#  Los datos de entrada/salida (CSV, TXT, NC, XLS*) NO.
+# ============================================================
+
+# --- Sistema / macOS ---
 .DS_Store
-*.[oa]
 *~
+
+# --- Compilacion ---
+*.[oa]
 *.mod
+*.MOD
 *.exe
+*.out
 a.out
-salida*
-wrfche*
+
+# --- Logs ---
 *.log
+
+# NetCDF (salidas de 10_storage y 11_annual)
+*.nc
+*.NC
+
+# Hojas de calculo (datos de referencia grandes)
+*.xls
+*.xlsx
+*.XLS
+*.XLSX
+
+# PostScript / graficas
+*.ps
+
 libnetcdf*
 02_aemis/A*csv
+03_movilspatial/salida*.csv
 04_temis/TA*txt
 05_semisM/M_*.txt
+05_semisM/M_CO.csv
 06_temisM/TM*.txt
 07_puntual/T_ANN*.txt
 08_spec/RADM-2*
@@ -18,4 +46,21 @@ libnetcdf*
 09_pm25spec/*A.txt
 09_pm25spec/*P.txt
 09_pm25spec/*M.txt
+10_storage/wrfchemi*
 TB*.txt
+# ============================================================
+#  ARCHIVOS GENERADOS POR AUTOTOOLS (no versionar)
+# ============================================================
+Makefile
+Makefile.in
+*/Makefile
+*/Makefile.in
+aclocal.m4
+autom4te.cache/
+build-aux/
+config.status
+config.log
+configure
+configure~
+# Generado por configure a partir de ejecuta.sh.in
+ejecuta.sh

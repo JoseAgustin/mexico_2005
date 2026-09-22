@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = 01_pob 02_aemis 03_movilspatial 04_temis 05_semisM 07_puntual
+SUBDIRS = 01_pob 02_aemis 03_movilspatial 04_temis 05_semisM 06_temisM \
+          07_puntual 08_spec 09_pm25spec 12_biogenic
 
 if HAVE_NETCDF
 SUBDIRS += 10_storage

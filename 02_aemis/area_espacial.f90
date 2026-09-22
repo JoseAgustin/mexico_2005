@@ -106,7 +106,7 @@ implicit none
     read (10,*) cdum
     read (10,*) cdum
     do i=1,nl
-        print *,i
+        !print *,i
         read(10,*)grip(i),idp(i),fp1(i),fp2(i),fp3(i)
     end do
     close(10)

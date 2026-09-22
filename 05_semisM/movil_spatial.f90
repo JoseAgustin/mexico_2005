@@ -38,7 +38,7 @@ subroutine imprime
     integer i,j,k
 	character(len=15) ::name
 	do i=1,7
-	name='M_'//trim(pol(i))//'.txt'
+	name='M_'//trim(pol(i))//'.csv'
 	open(10,file=name)
 	write(10,*)'GRIDCODE emissions in Mg per year'
 	write(10,210)size(jscc),(jscc(j),j=1,size(jscc))
@@ -143,7 +143,7 @@ subroutine lee
 	integer:: i
 	character(len=10):: cdum
 	print *,'Starts reading files'
-	open(10,file='M_E2008.csv',status='old',action='read')
+	open(10,file='M_E2005.csv',status='old',action='read')
 	read(10,'(A)') cdum !read header
 	i=0
 	do 
@@ -159,7 +159,7 @@ subroutine lee
 	do i=1,nl
 	read(10,*,ERR=140) id(i),iscc(i),pol(i),ei(i),im(i)
 	end do
-	print *,'End reading file M_E2008.csv'
+	print *,'End reading file M_E2005.csv'
 	close(10)
 !
 	open(10,file='gri_movil.csv',status='old',action='read')

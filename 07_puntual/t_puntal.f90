@@ -361,10 +361,10 @@ subroutine guarda
 			end do
 		close(unit=10)
 	end do
-210 format(I8,',',I3,',',<nh-1>(ES,","),ES)
-220 format(f10.6,',',f10.4,',',I3,',',<nh-1>(ES,","),ES)
-300 format(I10,',',f10.6,',',f10.4,',',I3,',',<nh-1>(ES,","),ES)
-310 format(I10,',',I8,',',I3,',',<nh-1>(ES,","),ES)
+210 format(I8,',',I3,',',23(ES0.4,","),ES0.4)
+220 format(f10.6,',',f10.4,',',I3,',',23(ES0.4,","),ES0.4)
+300 format(I10,',',f10.6,',',f10.4,',',I3,',',23(ES0.4,","),ES0.4)
+310 format(I10,',',I8,',',I3,',',23(ES0.4,","),ES0.4)
 end subroutine guarda
 !
    Subroutine localization(xlat,xlon,mi,mj,clat,clon,ist,jst,nst)

@@ -103,7 +103,10 @@ AC_CONFIG_FILES([Makefile
                  03_movilspatial/Makefile
                  04_temis/Makefile
                  05_semisM/Makefile
-                 07_puntual/Makefile])
+                 06_temisM/Makefile
+                 07_puntual/Makefile
+                 08_spec/Makefile
+                 09_pm25spec/Makefile])
 
 if test "x$ja_have_netcdf" = xyes; then
   AC_CONFIG_FILES([10_storage/Makefile])

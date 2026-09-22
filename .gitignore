@@ -65,3 +65,5 @@ configure
 configure~
 # Generado por configure a partir de ejecuta.sh.in
 ejecuta.sh
+01_pob/gri_pob2.txt
+03_movilspatial/salida3.csv

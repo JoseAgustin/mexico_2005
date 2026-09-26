@@ -109,7 +109,8 @@ AC_CONFIG_FILES([Makefile
                  09_pm25spec/Makefile])
 
 if test "x$ja_have_netcdf" = xyes; then
-  AC_CONFIG_FILES([10_storage/Makefile])
+  AC_CONFIG_FILES([10_storage/Makefile
+                   11_anual/Makefile])
 fi
 
 AC_CONFIG_FILES([ejecuta.sh], [chmod +x ejecuta.sh])

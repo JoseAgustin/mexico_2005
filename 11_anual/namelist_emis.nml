@@ -1,0 +1,19 @@
+        !
+        !   Definicion de variables para calculo del Inventario
+        !
+        &region_nml
+        zona ="mexico"
+        /
+        &fecha_nml
+        idia=01
+        month=01
+        anio=2005
+        periodo=1
+        /
+        &verano_nml
+        lsummer = .false.
+        /
+        &chem_nml
+        mecha='radm2'
+        model=0
+        /

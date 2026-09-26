@@ -4,5 +4,5 @@ include $(top_srcdir)/common.am
 AM_FCFLAGS += $(NETCDF_FCFLAGS)
 LDADD       = $(NETCDF_LIBS)
 
-bin_PROGRAMS       = radm2bio4
-radm2bio4_SOURCES  = guarda2_nc2005.f90
+bin_PROGRAMS       = radm2
+radm2_SOURCES  = guarda2_nc2005.f90

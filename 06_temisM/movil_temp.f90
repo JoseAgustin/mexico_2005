@@ -40,9 +40,9 @@ character(len=14),dimension(nf) ::efile,casn
 
  data efile /'M_CO.csv','M_NH3.csv','M_NOx.csv','M_SO2.csv', &
 &           'M_PM10.csv','M_PM25.csv','M_COV.csv'/
- data casn /'TMCO__2005.csv','TMNH3_2005.csv','TMNOx_2005.csv',&
-&           'TMSO2_2005.csv','TMPM102005.csv','TMPM2_2005.csv',&
-&           'TMCOV_2005.csv'/
+ data casn /'TMCO__2005.txt','TMNH3_2005.txt','TMNOx_2005.txt',&
+&           'TMSO2_2005.txt','TMPM102005.txt','TMPM2_2005.txt',&
+&           'TMCOV_2005.txt'/
 
 common /vars/ fweek,nscc,nm,month,daytype,perfil,mes,dia,hora,current_date
 end module
